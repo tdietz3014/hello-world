@@ -1,0 +1,61 @@
+trigger:
+- hello-world
+#parameters:
+  #- name: variablegroup1
+    #default: ORSBuildVariable
+    
+##### Setting Stages #####
+stages:
+- stage: 'BuildStage'
+  displayName: 'ORS Application Build from June Release Branch'
+  jobs:
+    - job: 'BuildProcess'
+      displayName: 'ORS Application Build Job'
+      pool: 
+        vmImage: 'Ubuntu-16.04'
+      steps:         
+       # - task: JavaToolInstaller@0
+        #  displayName: Java Tool Installer
+         # inputs:
+         #   versionSpec: '8'
+           # jdkArchitectureOption: 'x64'
+           # jdkSourceOption: 'LocalDirectory'
+           # jdkFile: $(jdkFilePath)
+           # jdkDestinationDirectory: $(jdkDestinationPath)
+           # cleanDestinationDirectory: false
+        
+        - task: Maven@3
+          displayName: 'Maven Build'
+          inputs:
+            mavenPomFile: 'pom.xml'
+            javaHomeOption: 'JDKVersion'
+            mavenVersionOption: 'Default'
+            mavenAuthenticateFeed: false
+            effectivePomSkip: false
+            sonarQubeRunAnalysis: false
+            publishJUnitResults: false
+            testResultsFiles: '**/surefire-reports/TEST-*.xml'
+            goals: 'package'
+            #goals: 'integration-test -DskipIntegrationTests=false -Dmaven.test.failure.ignore=true'
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(Build.SourcesDirectory)\target\'
+            Contents: '*.war'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)\$(TargetApplicationName)\'
+            
+          # Archive files
+          # Compress files into .7z, .tar.gz, or .zip
+        - task: ArchiveFiles@2
+          displayName: Archive Build Files
+          inputs:
+            rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+            includeRootFolder: false  
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip'           
+        
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Artifact: $(Build.BuildNumber).zip'
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip'
+            ArtifactName: '$(Build.BuildNumber)'
+            artifactType:  container 
