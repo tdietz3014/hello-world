@@ -47,7 +47,7 @@ stages:
           inputs:
             SourceFolder: '$(Build.SourcesDirectory)/target/'
             Contents: '*.war'
-            TargetFolder: '$(Build.ArtifactStagingDirectory)\$(TargetApplicationName)\'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)/$(TargetApplicationName)/'
             
           # Archive files
           # Compress files into .7z, .tar.gz, or .zip
