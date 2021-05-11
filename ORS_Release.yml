@@ -40,8 +40,8 @@ stages:
           
         - task: Delay@1
           inputs:
-            delayForMinutes: '2'
-            
+            delayForMinutes: '3'
+
         - task: CopyFiles@2
           inputs:
             SourceFolder: '$(Build.SourcesDirectory)\target\'
