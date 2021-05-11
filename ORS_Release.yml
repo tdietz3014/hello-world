@@ -45,7 +45,7 @@ stages:
               "Start-Sleep -s 30"
         - task: CopyFiles@2
           inputs:
-            SourceFolder: '$(Build.SourcesDirectory)\target\'
+            SourceFolder: '$(Build.SourcesDirectory)/target/'
             Contents: '*.war'
             TargetFolder: '$(Build.ArtifactStagingDirectory)\$(TargetApplicationName)\'
             
