@@ -37,6 +37,11 @@ stages:
             testResultsFiles: '**/surefire-reports/TEST-*.xml'
             goals: 'package'
             #goals: 'integration-test -DskipIntegrationTests=false -Dmaven.test.failure.ignore=true'
+          
+        - task: Delay@1
+          inputs:
+            delayForMinutes: '2'
+            
         - task: CopyFiles@2
           inputs:
             SourceFolder: '$(Build.SourcesDirectory)\target\'
