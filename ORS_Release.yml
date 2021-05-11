@@ -38,10 +38,11 @@ stages:
             goals: 'package'
             #goals: 'integration-test -DskipIntegrationTests=false -Dmaven.test.failure.ignore=true'
           
-        - task: Delay@1
+        - task: PowerShell@2
           inputs:
-            delayForMinutes: '3'
-
+            targetType: 'inline'
+            script:               
+              "Start-Sleep -s 30"
         - task: CopyFiles@2
           inputs:
             SourceFolder: '$(Build.SourcesDirectory)\target\'
